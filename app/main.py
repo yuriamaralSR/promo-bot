@@ -1,12 +1,14 @@
 from fastapi import FastAPI
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
+from app.core.scraper.shopee_api import ShopeeAPIClient
 
 app = FastAPI()
+shopee_client = ShopeeAPIClient()
 
 @app.get("/")
 async def root():
-    debug_mode = os.getenv("DEBUG")
-    return {"message": f"PromoBot API - Debug: {debug_mode}"}
+    return {"message": "Welcome to the Shopee Offers API"}
+
+@app.get("/offers")
+async def get_offers():
+    offers = shopee_client.fetch_offers()
+    return {"offers": offers[:5]}
